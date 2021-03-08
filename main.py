@@ -25,5 +25,3 @@ if __name__ == "__main__":
         args.stride = args.split_size
 
     pascal_voc_generate(args)
-
-

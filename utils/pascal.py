@@ -37,4 +37,3 @@ def pascal_voc_generate(args):
     dataset = PascalVOCDataset('PascalVOC')
     dataset.save_dataset(images, 'image', args.output_format)
     dataset.save_dataset(labels, 'label', args.output_format)
-
