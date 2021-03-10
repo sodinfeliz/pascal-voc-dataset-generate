@@ -1,7 +1,12 @@
 
+# directories ignoring
 .ipynb_checkpoints/
 __pycache__/
 PascalVOC/
 
+# files ignoring
 command.txt
-
+sample/*.png
+!sample/image.png
+!sample/label.png
+*.ipynb
