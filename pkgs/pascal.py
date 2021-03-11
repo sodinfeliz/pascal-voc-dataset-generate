@@ -6,8 +6,8 @@ from pathlib import Path
 from PIL import Image
 from collections import Counter
 from tqdm import tqdm
-from .split import split_image, readim
-from .files import file_check
+from .split import split_image
+from .files import file_check, readim
 
 
 class PascalVOCDataset(object):
@@ -35,26 +35,25 @@ class PascalVOCDataset(object):
 
     
     def _split_image(self):
+        self.image = readim(self.args.im_path, self.args.color_mode)
+        self.label = readim(self.args.lb_path, 'grayscale')
         self.images = split_image(
-            self.args.im_path, self.args.color_mode, 
-            self.args.split_size, self.args.stride, 
-            self.args.padding)
+            self.image, self.args.split_size,
+            self.args.stride, self.args.padding)
         self.labels = split_image(
-            self.args.lb_path, self.args.color_mode, 
-            self.args.split_size, self.args.stride, 
-            self.args.padding)
+            self.label, self.args.split_size,
+            self.args.stride, self.args.padding)
         assert len(self.images) == len(self.labels), "Inconsistent with image and label image sizes."
         self.sz = len(self.images)
 
 
     def _back_detect(self):
         if self.args.background_filter:
-            org_im = readim(self.args.im_path, self.args.color_mode)
-            h, w, short = *org_im.shape[:2], 2000
+            h, w, short = *self.image.shape[:2], 2000
             if h > w:
-                im = cv2.resize(org_im, (w*short//h, short), cv2.INTER_NEAREST)
+                im = cv2.resize(self.image, (w*short//h, short), cv2.INTER_NEAREST)
             else:
-                im = cv2.resize(org_im, (short, h*short//w), cv2.INTER_NEAREST)
+                im = cv2.resize(self.image, (short, h*short//w), cv2.INTER_NEAREST)
             im_reshape = im.reshape(-1, 3)
             self.back_color = Counter(map(tuple, im_reshape)).most_common(1)[0][0]
 
