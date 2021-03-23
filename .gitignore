@@ -3,10 +3,8 @@
 .ipynb_checkpoints/
 __pycache__/
 PascalVOC/
+sample/
 
 # files ignoring
 command.txt
-sample/*.png
-!sample/image.png
-!sample/label.png
 *.ipynb
